@@ -1,5 +1,19 @@
-import { BelongsTo, Column, DataType, ForeignKey, HasOne, Model, Table } from "sequelize-typescript";
+import {
+  BelongsToMany,
+  Column,
+  DataType,
+  HasMany,
+  HasOne,
+  Model,
+  Table
+} from "sequelize-typescript";
 import { UserDetail } from "../../user-details/entity/user.detail.model";
+import { UserRoles } from "../../role/entity/user.roles.model";
+import { Role } from "../../role/entity/role.model";
+import { Descussions } from "../../discussions/entity/descussions.model";
+import { Sulution } from "../../sulution/entity/sulution.model";
+import { PetitionModel } from "../../petitions/entity/petition.model";
+import { Articles } from "../../articles/entity/articles.model";
 
 interface  UserCreateArt {
   email: string;
@@ -27,6 +41,21 @@ export class User extends Model<User, UserCreateArt> {
   @HasOne(()=> UserDetail, 'userId')
   userDetail: UserDetail
 
-  @Column({type: DataType.STRING, allowNull: false})
-  role: string
+  // @Column({type: DataType.STRING, allowNull: false})
+  // role: string
+
+  @BelongsToMany(() => Role, () => UserRoles)
+  roles: Role[]
+
+  @HasMany(() => Descussions)
+  descussion: Descussions[]
+
+  @HasMany(() => Sulution)
+  sulutuin: Sulution[]
+
+  @HasMany(() => PetitionModel)
+  petition: PetitionModel[]
+
+  @HasMany(() => Articles)
+  article: Articles[]
 }

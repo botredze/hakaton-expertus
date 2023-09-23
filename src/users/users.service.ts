@@ -2,8 +2,6 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
 import { User } from "./entity/users.model";
 import { AddRoleDto, BanUserDto, CreateUserDto } from "./dto /user.dto";
-import { UserData } from "../user-details/dto/user.details.dto";
-import { UserDetail } from "../user-details/entity/user.detail.model";
 import { RoleService } from "../role/role.service";
 
 @Injectable()
@@ -14,13 +12,17 @@ export class UsersService {
   }
 
   async  createUser (dto: CreateUserDto): Promise<User>{
-    if(dto) {
-      const user = await this.userModel.create(dto)
-      const role = await this.roleService.getRoleByValue('USER')
-      await user.$set('role', [role.id])
-      return user
+    try {
+      if (dto) {
+        const user = await this.userModel.create(dto)
+        const role = await this.roleService.getRoleByValue('USER')
+        await user.$set('roles', [role.id])
+        return user
+      }
+      throw  new HttpException("Create user error", HttpStatus.BAD_REQUEST)
+    }catch (error){
+      console.log(error)
     }
-    throw  new HttpException("Create user error", HttpStatus.BAD_REQUEST)
   }
 
   async getUserById(id: number):Promise<User> {

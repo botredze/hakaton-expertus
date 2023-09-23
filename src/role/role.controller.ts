@@ -13,7 +13,7 @@ export class RoleController {
     return this.roleService.createRole(dto);
   }
 
-  @Get(':/value')
+  @Get(':value')
   getByValue(@Param('value') value: string) {
     return this.roleService.getRoleByValue(value)
   }
