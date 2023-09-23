@@ -6,12 +6,12 @@ services:
     build:
       context: .
     env_file:
-      - .development.env
+      - .env
     volumes:
       - .:/app
       - /app/node_modules
     ports:
-      - 5000:5000
+      - 3000:3000
       - 9229:9229
     command: npm run start:dev
     depends_on:
@@ -19,13 +19,14 @@ services:
     restart: always
   postgres:
     container_name: postgres
-    image: postgres:12
+    image: postgres:14
     env_file:
       - .env
     environment:
+      POSTGRES_PASSWORD: admin123
       PG_DATA: /var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - 5433:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
     restart: always
